@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../config/axios";
 import { setLogin, userLoginFailed } from "../features/userSlice/authSlice";
 
 export const register = (formData) => async (dispatch) => {
