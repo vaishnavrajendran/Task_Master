@@ -87,6 +87,7 @@ const LandingPage = () => {
         formData.append("email", emailRef.current.value);
         formData.append("password", passwordRef.current.value);
         dispatch(register(formData));
+        navigate("/home")
       } catch (error) {
         console.log(error.message);
       }

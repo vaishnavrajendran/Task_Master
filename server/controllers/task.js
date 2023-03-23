@@ -50,3 +50,29 @@ export const manage = async (req, res) => {
     console.log(error.message);
   }
 };
+
+export const update = async (req, res) => {
+  try {
+    const { userId, heading, dynamicTasks, startDate, endDate } = req.body;
+    const findTask = await Task.findById(userId);
+    findTask.heading = heading;
+    findTask.pending = dynamicTasks;
+    findTask.startDate = startDate;
+    findTask.endDate = endDate
+    const savedTask = await findTask.save();
+    res.status(201).json(savedTask); 
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+export const deleteTask = async (req, res) => {
+  try {
+    const { _id, userId } = req.body;
+    const findTask = await Task.deleteOne({_id:_id});
+    const getAll = await Task.find({userId:userId});
+    res.status(201).json(getAll);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
