@@ -1,6 +1,7 @@
 import axios from "axios";
 import { setUserTasks, updateUserTasks } from "../features/TaskSlice/taskSlice";
 
+
 export const postTask =
   (heading, sub1, dynamicArray, token, startDate, endDate, userId) =>
   async (dispatch) => {
@@ -13,7 +14,7 @@ export const postTask =
       };
       const {data} = await axios
         .post(
-          "http://localhost:3001/task/upload",
+          "/task/upload",
           { heading, sub1, dynamicArray, startDate, endDate, userId },
           config
         )
@@ -32,7 +33,7 @@ export const getUserTasks = (userId,token) => async (dispatch) => {
         "Content-type": "application/json",
       },
     };
-    const { data } = await axios.get(`http://localhost:3001/task/get/${userId}`,config);
+    const { data } = await axios.get(`/task/get/${userId}`,config);
     dispatch(setUserTasks(data))
   } catch (error) {
     console.log(error.message);
@@ -47,7 +48,7 @@ export const manageTask = (post,_id,token) => async(dispatch) => {
               "Content-type": "application/json",
             },
           };
-          const { data } = await axios.patch(`http://localhost:3001/task/manage`,{post,_id},config)
+          const { data } = await axios.patch(`/task/manage`,{post,_id},config)
           dispatch(updateUserTasks(data))
     } catch (error) {
         console.log(error.message);
@@ -62,7 +63,7 @@ export const updateTask = (heading,dynamicTasks,token,startDate,endDate,userId) 
         "Content-type": "application/json",
       },
     };
-    const { data } = await axios.patch(`http://localhost:3001/task/update`,{heading,dynamicTasks,token,startDate,endDate,userId},config)
+    const { data } = await axios.patch(`/task/update`,{heading,dynamicTasks,token,startDate,endDate,userId},config)
     dispatch(updateUserTasks(data))
   } catch (error) {
     console.log(error.message);
@@ -77,7 +78,7 @@ export const deleteTasks = (_id, userId, token) => async (dispatch) => {
         "Content-type": "application/json",
       }
     };
-    const { data } = await axios.patch(`http://localhost:3001/task/delete`,{_id, userId},config)
+    const { data } = await axios.patch(`/task/delete`,{_id, userId},config)
     dispatch(setUserTasks(data))
   } catch (error) {
     console.log(error.message);

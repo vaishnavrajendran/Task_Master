@@ -9,7 +9,7 @@ export const register = (formData) => async (dispatch) => {
       },
     };
     const { data } = await axios
-      .post("http://localhost:3001/auth/register", formData, config)
+      .post("/auth/register", formData, config)
       .catch((error) => {
         console.log(error.message);
       });
@@ -26,7 +26,7 @@ export const login = (formData) => async (dispatch) => {
       },
     };
     const { data } = await axios
-      .post("http://localhost:3001/auth/login", formData, config)
+      .post("/auth/login", formData, config)
       .catch((err) => {
         dispatch(userLoginFailed({ data: err.response.data.error }));
       });
