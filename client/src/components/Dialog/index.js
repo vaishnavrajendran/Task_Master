@@ -11,6 +11,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useDispatch, useSelector } from "react-redux";
 import { postTask } from "../../actions/taskActions";
+import { toast, Toaster } from "react-hot-toast";
 
 export default function AlertDialog(color) {
   const [open, setOpen] = React.useState(false);
@@ -21,6 +22,9 @@ export default function AlertDialog(color) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleError = () => {
+    toast.error("All fields should be filled");
   };
   var counter = 2;
 
@@ -48,17 +52,17 @@ export default function AlertDialog(color) {
   const [startDate, setStartDate] = React.useState();
   const [endDate, setEndDate] = React.useState();
   const dispatch = useDispatch();
-  const token = useSelector(state => state.authData.userInfo.token)
-  const userId = useSelector(state => state.authData.userInfo.user._id)
+  const token = useSelector((state) => state.authData.userInfo.token);
+  const userId = useSelector((state) => state.authData.userInfo.user._id);
 
   const headingRef = React.useRef();
   const subOneRef = React.useRef();
 
   function getValuesFromInputFields() {
-    const container = document.getElementById('input-container');
+    const container = document.getElementById("input-container");
     const inputFields = container.querySelectorAll('input[type="text"]');
     const values = [];
-  
+
     inputFields.forEach((input) => {
       values.push(input.value);
     });
@@ -67,8 +71,18 @@ export default function AlertDialog(color) {
 
   const getData = () => {
     const dynamicTasks = getValuesFromInputFields();
-    dispatch(postTask(headingRef.current.value,subOneRef.current.value,dynamicTasks,token,startDate?.$d,endDate?.$d,userId));
-  }
+      dispatch(
+        postTask(
+          headingRef.current.value,
+          subOneRef.current.value,
+          dynamicTasks,
+          token,
+          startDate?.$d,
+          endDate?.$d,
+          userId
+        )
+      );
+  };
 
   return (
     <div>
@@ -81,6 +95,9 @@ export default function AlertDialog(color) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
+        <div>
+          <Toaster />
+        </div>
         <DialogTitle id="alert-dialog-title">Task Master</DialogTitle>
         <DialogContent>
           <div class="container max-w-screen-lg mx-auto">
@@ -90,7 +107,7 @@ export default function AlertDialog(color) {
                   <div class="md:col-span-5">
                     <label for="full_name">Task Heading</label>
                     <input
-                    ref={headingRef}
+                      ref={headingRef}
                       type="text"
                       name="heading"
                       id="heading"
@@ -100,7 +117,7 @@ export default function AlertDialog(color) {
                   <div class="md:col-span-5">
                     <label for="email">Sub Task 1</label>
                     <input
-                    ref={subOneRef}
+                      ref={subOneRef}
                       type="text"
                       name="sub1"
                       id="sub 1"
@@ -136,8 +153,17 @@ export default function AlertDialog(color) {
                     <div class="inline-flex items-end">
                       <button
                         onClick={() => {
-                          getData()
-                          handleClose()
+                          if (
+                            headingRef.current.value == "" ||
+                            subOneRef.current.value == "" ||
+                            startDate == null ||
+                            endDate == null
+                          ) {
+                            handleError();
+                          } else {
+                            getData();
+                            handleClose();
+                          }
                         }}
                         class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                       >

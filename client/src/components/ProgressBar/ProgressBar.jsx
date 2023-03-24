@@ -1,9 +1,7 @@
 import React from "react";
 
 const ProgressBar = ({t_length,comp_length}) => {
-    console.log(t_length);
     let percentage = (comp_length/t_length)*100
-    console.log("percentage",percentage);
   return (
     <div class="w-full mb-3">
       <div class="shadow w-full bg-gray-900">

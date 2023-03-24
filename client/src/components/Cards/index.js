@@ -121,7 +121,7 @@ const Cards = ({
             );
           })}
           <h4 class="flex items-center mt-2 text-xl font-bold text-red-500">
-            DeadLine : {formattedDate}
+            DeadLine : {formattedDate === NaN ? "Not Selected" : formattedDate}
           </h4>
         </div>
       </div>

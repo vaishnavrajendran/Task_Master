@@ -7,12 +7,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../../components/Navbar";
-import {  useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { updateTask } from "../../actions/taskActions";
 import { useNavigate } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
 
 const EditTask = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   var counter = 2;
   function addInput() {
     var container = document.getElementById("input-container");
@@ -52,8 +53,8 @@ const EditTask = () => {
       values.push(input.value);
     });
     inputField2.forEach((input) => {
-        values.push(input.value);
-    })
+      values.push(input.value);
+    });
     return values;
   }
   const { state } = useLocation();
@@ -63,7 +64,7 @@ const EditTask = () => {
     if (i === 1 && i !== 0) {
       let inputFieldsDiv = document.getElementById("inputFields");
       // loop through the elements array and create a new input field for each element
-      for (let i = 0; i < state.pending.length ; i++) {
+      for (let i = 0; i < state.pending.length; i++) {
         console.log(i);
         // create a new input field
         let inputField = document.createElement("input");
@@ -89,6 +90,10 @@ const EditTask = () => {
     i++;
   }, []);
 
+  const handleError = () => {
+    toast.error("All fields should be filled");
+  };
+
   const getData = () => {
     const dynamicTasks = getValuesFromInputFields();
     dispatch(
@@ -104,11 +109,13 @@ const EditTask = () => {
   };
 
   const headingRef = useRef();
-  const subOneRef = useRef();
   return (
     <div>
       <Navbar />
       <div class="container max-w-screen-lg mx-auto mt-10">
+        <div>
+          <Toaster />
+        </div>
         <div>
           <div class="lg:col-span-2">
             <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
@@ -154,8 +161,16 @@ const EditTask = () => {
                 <div class="inline-flex items-end">
                   <button
                     onClick={() => {
-                      getData();
-                      navigate("/")
+                      if (
+                        headingRef.current.value == "" ||
+                        startDate == null ||
+                        endDate == null
+                      ) {
+                        handleError();
+                      } else {
+                        getData();
+                        navigate("/");
+                      }
                     }}
                     class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   >

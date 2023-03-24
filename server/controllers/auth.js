@@ -5,12 +5,7 @@ import User from "../models/User.js";
 /* REGISTER USER */
 export const register = async (req, res) => {
   try {
-    const {
-      firstName,
-      lastName,
-      email,
-      password
-    } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
@@ -34,11 +29,11 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
     if (!user) {
-        throw new Error( "User does not exist. " )
+      throw new Error("User does not exist. ");
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-        throw new Error( "Invalid credentials. " )
+      throw new Error("Invalid credentials. ");
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     delete user.password;

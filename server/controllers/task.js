@@ -6,14 +6,14 @@ export const upload = async (req, res) => {
       req.body;
     dynamicArray.unshift(sub1);
     const newTask = new Task({
-      userId: userId,
+      userId: req.user.id,
       heading,
       pending: dynamicArray,
       startDate,
       endDate,
     });
     const savedTask = newTask.save();
-    const getUserTask = await Task.find({ userId: userId });
+    const getUserTask = await Task.find({ userId: req.user.id });
     res.status(201).json(getUserTask);
   } catch (error) {
     console.log(error.message);
@@ -23,7 +23,7 @@ export const upload = async (req, res) => {
 export const getTask = async (req, res) => {
   try {
     const { userId } = req.params;
-    const getUserTask = await Task.find({ userId: userId });
+    const getUserTask = await Task.find({ userId: req.user.id });
     res.status(201).json(getUserTask);
   } catch (error) {
     console.log(error.message);
@@ -32,18 +32,18 @@ export const getTask = async (req, res) => {
 
 export const manage = async (req, res) => {
   try {
-    const { _id, post} = req.body;
-    const findTask = await Task.findById(_id)
-    if(findTask.pending.includes(post)){
-        findTask.completed.push(post);
-        const index = findTask.pending.findIndex(element => element === post)
-        findTask.pending.splice(index, 1);
-        await findTask.save();
+    const { _id, post } = req.body;
+    const findTask = await Task.findById(_id);
+    if (findTask.pending.includes(post)) {
+      findTask.completed.push(post);
+      const index = findTask.pending.findIndex((element) => element === post);
+      findTask.pending.splice(index, 1);
+      await findTask.save();
     } else {
-        findTask.pending.push(post);
-        const index = findTask.completed.findIndex(element => element === post)
-        findTask.completed.splice(index, 1);
-        await findTask.save();
+      findTask.pending.push(post);
+      const index = findTask.completed.findIndex((element) => element === post);
+      findTask.completed.splice(index, 1);
+      await findTask.save();
     }
     res.status(201).json(findTask);
   } catch (error) {
@@ -58,21 +58,21 @@ export const update = async (req, res) => {
     findTask.heading = heading;
     findTask.pending = dynamicTasks;
     findTask.startDate = startDate;
-    findTask.endDate = endDate
+    findTask.endDate = endDate;
     const savedTask = await findTask.save();
-    res.status(201).json(savedTask); 
+    res.status(201).json(savedTask);
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
 export const deleteTask = async (req, res) => {
   try {
     const { _id, userId } = req.body;
-    const findTask = await Task.deleteOne({_id:_id});
-    const getAll = await Task.find({userId:userId});
+    const findTask = await Task.deleteOne({ _id: _id });
+    const getAll = await Task.find({ userId: req.user.id });
     res.status(201).json(getAll);
   } catch (error) {
     console.log(error.message);
   }
-}
+};
