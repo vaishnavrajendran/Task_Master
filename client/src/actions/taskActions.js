@@ -19,7 +19,7 @@ export const postTask =
           config
         )
         .catch((err) => console.log(err.message));
-      dispatch(setUserTasks(data));
+        dispatch(setUserTasks(data))
     } catch (error) {
       console.log(error.message);
     }

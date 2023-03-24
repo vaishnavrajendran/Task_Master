@@ -5,6 +5,7 @@ import { login, register } from "../../actions/userActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
+import Loading from "../../components/Loading/Loading";
 
 const LandingPage = () => {
   const [pageType, setPageType] = useState("login");
@@ -13,6 +14,7 @@ const LandingPage = () => {
   const { reason } = useSelector((state) => state.authData);
   const token = useSelector((state) => state.authData.userInfo);
   const [message, setMessage] = useState(null);
+  const [loading,setLoading] = useState(false);
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
   const firstNameRef = useRef();
@@ -32,6 +34,7 @@ const LandingPage = () => {
   useEffect(() => {
     if (token != null) {
       navigate("/home");
+      setLoading(false);
     }
   }, [token]);
 
@@ -116,13 +119,17 @@ const LandingPage = () => {
                 <input ref={passwordRef} required name="" type="password" />
                 <label>Password</label>
               </div>
-              <a onClick={handleLogin}>
+              <a onClick={() => {
+                handleLogin()
+                setLoading(true)
+              }}>
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
                 Submit
               </a>
+              {loading && <Loading/>}
             </form>
             <p>
               Don't have an account?{" "}

@@ -35,7 +35,6 @@ const Cards = ({
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const year = date.getFullYear().toString();
   const formattedDate = `${day}-${month}-${year}`;
-  // const deadLine = endDate.toDateString();
   return (
     <>
       <div class="grid grid-cols-1 justify-center items-center mt-16 ">
